@@ -2,39 +2,91 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Player player;
-    [SerializeField] private Enemy enemy;
-    [SerializeField] private Character character;
+
+    [SerializeField] private Enemy enemyPrefabBerserker;
+    [SerializeField] private Enemy enemyPrefabMage;
+
+    [SerializeField] private Sprite berserkerSprite;
+    [SerializeField] private Sprite mageSprite;
+    [SerializeField] private Image enemyImage;
+
     [SerializeField] private TMP_Text playerName, playerHealth, enemyName, enemyHealth;
-    // Start is called before the first frame update
-void Start()
+    [SerializeField] private GameObject gameOverPanel; // Game Over panelis
+
+    private Enemy currentEnemy;
+    
+
+    void Start()
     {
+        gameOverPanel.SetActive(false); // Slēpjam Game Over ekrānu
+        SpawnNewEnemy();
         RefreshUI();
     }
 
-public void DoRound()
-{
-    //int playerDamage = player.Attack();
-    //enemy.TakeDamage(playerDamage);
-    enemy.TakeDamage(player.ActiveWeapon);
-    int enemyDamage = enemy.Attack();
-    player.TakeDamage(enemyDamage);
-    RefreshUI();
-}
-
-public void RefreshUI()
-{
-    playerName.text = player.CharName;
-    enemyName.text = enemy.name;
-    playerHealth.text ="health: " + player.health.ToString();
-    enemyHealth.text = "health: " + enemy.health.ToString();
-}
-    // Update is called once per frame
-    void Update()
+    void SpawnNewEnemy()
     {
-        
+        if (Random.value > 0.5f)
+        {
+            currentEnemy = Instantiate(enemyPrefabBerserker);
+            enemyImage.sprite = berserkerSprite;
+        }
+        else
+        {
+            currentEnemy = Instantiate(enemyPrefabMage);
+            enemyImage.sprite = mageSprite;
+        }
+
+        RefreshUI();
+    }
+
+    public void DoRound()
+    {
+        currentEnemy.TakeDamage(player.ActiveWeapon);
+
+        if (currentEnemy.health <= 0)
+        {
+            SpawnNewEnemy();
+            return;
+        }
+
+        int enemyDamage = currentEnemy.Attack();
+        player.TakeDamage(enemyDamage);
+
+        if (player.health <= 0)
+        {
+            GameOver();
+            return;
+        }
+
+        RefreshUI();
+    }
+
+    public void RefreshUI()
+    {
+        playerName.text = player.CharName;
+        playerHealth.text = "Health: " + player.health.ToString();
+
+        if (currentEnemy != null)
+        {
+            enemyName.text = currentEnemy.name;
+            enemyHealth.text = "Health: " + currentEnemy.health.ToString();
+        }
+    }
+
+    void GameOver()
+    {
+        Debug.Log("Game Over");
+        gameOverPanel.SetActive(true); // Parādam Game Over ekrānu
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Pārlādē scēnu
     }
 }
