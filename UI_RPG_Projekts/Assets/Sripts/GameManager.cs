@@ -17,14 +17,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image enemyImage;
 
     [SerializeField] private TMP_Text playerName, playerHealth, enemyName, enemyHealth;
-    [SerializeField] private GameObject gameOverPanel; // Game Over panelis
+    [SerializeField] private GameObject gameOverPanel; 
 
     private Enemy currentEnemy;
     
 
     void Start()
     {
-        gameOverPanel.SetActive(false); // Slēpjam Game Over ekrānu
+        gameOverPanel.SetActive(false); 
         SpawnNewEnemy();
         RefreshUI();
     }
@@ -82,11 +82,11 @@ public class GameManager : MonoBehaviour
     void GameOver()
     {
         Debug.Log("Game Over");
-        gameOverPanel.SetActive(true); // Parādam Game Over ekrānu
+        gameOverPanel.SetActive(true); 
     }
 
     public void RestartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Pārlādē scēnu
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); 
     }
 }

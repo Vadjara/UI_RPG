@@ -6,6 +6,7 @@ public class Character : MonoBehaviour
 {
     public int health;
     [SerializeField] private Weapon activeWeapon;
+    [SerializeField] private AudioClip attackSound;
 
     public Weapon ActiveWeapon
     {
@@ -14,10 +15,14 @@ public class Character : MonoBehaviour
 
     public virtual int Attack()
     {
+        if (attackSound != null)
+        {
+            AudioManager.instance.PlaySoundEffect(attackSound);
+        }
         return activeWeapon.GetDamage();
     }
 
-    public virtual void TakeDamage(int damage) // PIEVIENOTS "virtual"
+    public virtual void TakeDamage(int damage) 
     {
         Debug.Log(name + " health before hit: " + health);
         health -= damage;

@@ -14,8 +14,8 @@ public class Player : Character
 
     private bool isShieldActive = false;
     private int shieldDurability = 3; 
-    private int roundCounter = 0; // Skaita raundus līdz var izmantot heal
-    private int healAmount = 20; // Cik daudz dzīvības atjauno
+    private int roundCounter = 0; 
+    private int healAmount = 20; 
 
     public void ToggleShield()
     {
@@ -44,7 +44,7 @@ public class Player : Character
         health -= damage;
         Debug.Log(name + " Health after hit: " + health);
         
-        roundCounter++; // Palielinām raundu skaitītāju pēc uzbrukuma
+        roundCounter++; 
     }
 
     public void Heal()
@@ -53,12 +53,11 @@ public class Player : Character
         {
             health += healAmount;
             Debug.Log("Player healed for " + healAmount + " HP!");
-            roundCounter = 0; // Restartējam skaitītāju
+            roundCounter = 0; 
 
-            // Atskaņojam dziedināšanas skaņu
+
             AudioManager.instance.PlaySoundEffect(healSound);
 
-            // Atjauninām UI pēc heal
             FindObjectOfType<GameManager>().RefreshUI();
         }
         else

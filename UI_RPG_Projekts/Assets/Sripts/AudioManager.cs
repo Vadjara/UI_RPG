@@ -7,7 +7,6 @@ public class AudioManager : MonoBehaviour
     public static AudioManager instance;
 
     [SerializeField] private AudioSource backgroundMusic;
-    [SerializeField] private AudioSource sfxSource; // Jauns AudioSource tikai priekš SFX
 
     private void Awake()
     {
@@ -35,12 +34,11 @@ public class AudioManager : MonoBehaviour
             backgroundMusic.Play();
         }
     }
-
     public void PlaySoundEffect(AudioClip clip)
     {
-        if (clip != null && sfxSource != null)
+        if (clip != null)
         {
-            sfxSource.PlayOneShot(clip);
+            AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position);
         }
     }
 }
